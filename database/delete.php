@@ -1,12 +1,11 @@
 <?php
-require 'db.php';
 
-$id = $_GET['id'];
+    // Delete
 
-$sql = 'DELETE FROM students WHERE ID=:id';
+    include_once "../database/queries.php";
 
-$statement = $connection->prepare($sql);
+    $queries = new Queries();
 
-if ($statement->execute([':id'=>$id])) {
-    header("Location: /application");
-}
+    $queries->delete($_GET['id']);
+
+?>

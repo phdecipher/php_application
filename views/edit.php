@@ -1,31 +1,18 @@
 <?php
 
-  require '../database/db.php';
+    include_once "../database/queries.php";
 
-  $message = "";
+    $queries = new Queries();
 
-  $id = $_GET['id'];
-  $sql = 'SELECT * FROM students WHERE ID=:id';
+    // Reading single object from database given an ID
+    $student = $queries->readSingle($_GET['id']);
 
-  $statement = $connection->prepare($sql);
-  $statement->execute([':id' => $id]);
+    // Update
+    if (isset ($_POST['id']) && isset($_POST['last_name']) && isset($_POST['first_name']) && isset($_POST['course'])) {
 
-  $student = $statement->fetch(PDO::FETCH_OBJ);
-
-  if (isset ($_POST['id']) && isset($_POST['last_name']) && isset($_POST['first_name']) && isset($_POST['course'])) {
-    $id = $_POST['id'];
-    $last_name = $_POST['last_name'];
-    $first_name = $_POST['first_name'];
-    $course = $_POST['course'];
-
-    $sql = 'UPDATE students SET LAST_NAME=:last_name, FIRST_NAME=:first_name, COURSE=:course WHERE ID=:id';
-    $statement = $connection->prepare($sql);
-
-    if ($statement->execute([':id' => $id, ':last_name' => $last_name, ':first_name' => $first_name, ':course' => $course])) {
-      header("Location: /application");
+        $queries->update($_POST['id'], $_POST['last_name'], $_POST['first_name'], isset($_POST['course']));
+        
     }
-  }
-
 
 ?>
 

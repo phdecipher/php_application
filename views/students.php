@@ -1,31 +1,20 @@
 <?php
 
-  require 'database/db.php';
+  include_once 'database/queries.php';
+
+  $queries = new Queries();
 
   $message = "";
 
   if (isset ($_POST['id']) && isset($_POST['last_name']) && isset($_POST['first_name']) && isset($_POST['course'])) {
-    $id = $_POST['id'];
-    $last_name = $_POST['last_name'];
-    $first_name = $_POST['first_name'];
-    $course = $_POST['course'];
 
-    $sql = 'INSERT INTO students(ID, LAST_NAME, FIRST_NAME, COURSE) VALUES(:id, :last_name, :first_name, :course)';
-    $statement = $connection->prepare($sql);
+    // Create data
+    $message = $queries->create($_POST['id'], $_POST['last_name'], $_POST['first_name'], $_POST['course']);
 
-    if ($statement->execute([':id' => $id, ':last_name' => $last_name, ':first_name' => $first_name, ':course' => $course])) {
-      $message = 'Data Inserted Successfully.';
-    }
   }
 
-
-  $sql = 'SELECT * FROM students';
-
-  $statement = $connection->prepare($sql);
-
-  $statement->execute();
-
-  $students = $statement->fetchAll(PDO::FETCH_OBJ);
+  // Read data
+  $students = $queries->read();
 
 ?>
 
